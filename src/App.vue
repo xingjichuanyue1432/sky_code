@@ -1,30 +1,28 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
-  </div>
+  <div >
   <router-view/>
+  </div>
+  
 </template>
+<script>
+import jwt_decode from "jwt-decode"
+import { useStore } from 'vuex'
+import { isEmpty } from 'element-plus/es/utils';
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+export default{
+  setup(){
+    if(localStorage.app1_token){
+      console.log(localStorage.app1_token);
+      const decode=jwt_decode(localStorage.app1_token);
+      const store=useStore();
+      console.log("app",decode)
+      sessionStorage.setItem('userinfo',decode.id)
+      store.dispatch('upgetauth',!isEmpty(decode));
+      store.dispatch('upgetuser',decode);
+    }
+    
+  }
 }
+</script>
 
-#nav {
-  padding: 30px;
-}
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
